@@ -5,6 +5,16 @@ from .forms import StudentForm, FanForm
 from io import BytesIO
 from reportlab.pdfgen import canvas
 
+def index(request):
+    fans = Fan.objects.all()
+    students = Student.objects.all()
+
+    context = {
+        "fans":fans,
+        "students":students
+    }
+    return render(request,'index.html',context=context)
+
 def fan_create(request):
     if request.method == 'POST':
         form = FanForm(request.POST)
