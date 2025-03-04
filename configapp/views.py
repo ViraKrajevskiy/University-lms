@@ -20,7 +20,7 @@ def fan_create(request):
         form = FanForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('fan_create')
+            return redirect('home')
     else:
         form = FanForm()
     return render(request, 'fan_form.html', {'form': form})
@@ -30,7 +30,7 @@ def student_create(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('student_create')
+            return redirect('home')
     else:
         form = StudentForm()
     return render(request, 'student_form.html', {'form': form})
