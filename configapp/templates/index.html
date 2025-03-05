@@ -25,13 +25,13 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">
-            Dropdown
+            Added
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{% url 'student_create' %}">Add student</a></li>
             <li><a class="dropdown-item" href="{% url 'fan_create' %}">Add subject</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{% url 'teacheradd' %}">Add teacher</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -49,27 +49,32 @@
 <div class="row">
   <div class="col-3">
     <ul class="list-group">
-        <li class="list-group-item active" aria-current="true">Category</li>
-        
-        <li class="list-group-item">
-        <a href="#"></a>
-        </li>
+      <li class="list-group-item active" aria-current="true">Courses</li>
 
+      {% for item in fans %}
+          <li class="list-group-item">
+              <a href="{% url 'filtering' item.id %}">{{ item.title }}</a>
+          </li>
+      {% endfor %}
     </ul>
+
   </div>
   <div class="col-9">
 
     <div class="card text-center mt-4">
-
-      <div class="card-header"></div>
+      {% for item in students %}
+      <div class="card-header">{{item.first_name}}</div>
       <div class="card-body">
         <div class="row">
         </div>
-        <h5 class="card-title"></h5>
-        <p class="card-text"></p>
+        <h5 class="card-title">{{item.phone_number}}</h5>
+        <p class="card-text">{{item.adress}}  {{item.fan}}  {{item.teacher}}</p>
         <a href="#" class="btn btn-primary mt-3">Go somewhere</a>
+        </div>
       </div>
+      {% endfor %}
     </div>
+
 
   </div>
 

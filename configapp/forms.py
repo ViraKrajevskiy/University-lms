@@ -1,6 +1,17 @@
 from django import forms
-from .models import Fan, Student
+from .models import *
 import re
+
+
+
+
+class TeahcerForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = ['teacherName']
+        widgets = {
+            'teacherName':forms.TextInput(attrs={'class':'form-control'}),
+        }
 
 class FanForm(forms.ModelForm):
     class Meta:
@@ -9,7 +20,6 @@ class FanForm(forms.ModelForm):
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control'}),
         }
-
 
     def clean_title(self):
         title = self.changed_data['title']
