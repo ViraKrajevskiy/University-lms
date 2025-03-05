@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#">link</a>
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -50,25 +50,32 @@
   <div class="col-3">
     <ul class="list-group">
         <li class="list-group-item active" aria-current="true">Category</li>
-        
+        {% for item in students %}
         <li class="list-group-item">
-        <a href="#"></a>
+        <a href="{% url 'filter' item.fan_id %}">{{item.fan}}</a>
         </li>
+        {% endfor %}
 
     </ul>
   </div>
   <div class="col-9">
 
     <div class="card text-center mt-4">
-
-      <div class="card-header"></div>
+      {% for item in students %}
+      <div class="card-header">{{item.full_name}}</div>
       <div class="card-body">
         <div class="row">
         </div>
-        <h5 class="card-title"></h5>
-        <p class="card-text"></p>
+        <h5 class="card-title">{{item.phone_number}}</h5>
+        <p class="card-text">{{item.address}}{{item.fan}}</p>
         <a href="#" class="btn btn-primary mt-3">Go somewhere</a>
+        <form method="post" action="{% url 'delete_student' student.id %}">
+          {% csrf_token %}
+          <button type="submit">Удалить</button>
+      </form>
+      
       </div>
+      {% endfor %}
     </div>
 
   </div>
