@@ -12,7 +12,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 from .models import *
-
+from django.views.generic import *
 
 def generate_student_pdf(student):
     """Создаёт PDF с данными указанного студента."""
@@ -20,14 +20,14 @@ def generate_student_pdf(student):
     pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
 
     pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(200, 800, "Информация о студенте")
+    pdf.drawString(200, 800, "Info about student")
 
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(100, 760, f"ФИО: {student.full_name}")
-    pdf.drawString(100, 740, f"Телефон: {student.phone_number}")
-    pdf.drawString(100, 720, f"Адрес: {student.address}")
-    pdf.drawString(100, 700, f"Предмет: {student.fan.title}")
-    pdf.drawString(100, 680, f"Учитель: {student.teacher.teacherName}")
+    pdf.drawString(100, 760, f"Name: {student.full_name}")
+    pdf.drawString(100, 740, f"Phone number: {student.phone_number}")
+    pdf.drawString(100, 720, f"Adress: {student.address}")
+    pdf.drawString(100, 700, f"Subject: {student.fan.title}")
+    pdf.drawString(100, 680, f"Teacher: {student.teacher.teacherName}")
 
     # Добавление фото (если есть)
     if student.photo:
