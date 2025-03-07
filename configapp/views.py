@@ -6,7 +6,7 @@ from io import BytesIO
 import qrcode
 import os
 from django.conf import settings
-from .models import Student
+
 
 def generate_student_pdf(student):
     pdf_dir = os.path.join(settings.MEDIA_ROOT, 'pdf')
@@ -27,6 +27,7 @@ def generate_student_pdf(student):
     pdf.drawString(100, 720, f"Адрес: {student.adress}")
     pdf.drawString(100, 700, f"Предмет: {student.fan}")
     pdf.drawString(100, 680, f"Учитель: {student.teacher}")
+    pdf.drawImage(100,700,f"Фото: {student.photo}")
 
     pdf.showPage()
     pdf.save()
@@ -77,19 +78,19 @@ def filtering(request, fan_id):
 
 def teachercreate(request):
     if request.method == 'POST':
-        form = TeahcerForm(request.POST)
+        form = TeacherForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
     else:
-        form = TeahcerForm()
+        form = TeacherForm()
     return render(request, 'teacherad.html', {'form': form})
 
 
 
 def generate_qr(request):
     # Ссылка на Telegram-канал
-    telegram_link = "https://t.me/your_channel"
+    telegram_link = "https://t.me/c/1326340751/1214"
 
     # Создание QR-кода
     qr = qrcode.make(telegram_link)
@@ -128,12 +129,12 @@ def student_create(request):
 def update_teacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     if request.method == "POST":
-        form = TeahcerForm(request.POST, instance=teacher)
+        form = TeacherForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
             return redirect('teacher_list')  # Измени на свой маршрут
     else:
-        form = TeahcerForm(instance=teacher)
+        form = TeacherForm(instance=teacher)
     return render(request, 'about_teacher.html', {'form': form})
 
 

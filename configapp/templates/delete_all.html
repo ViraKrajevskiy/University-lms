@@ -47,13 +47,13 @@
         </div>
       </nav>
 
+
       <form method="post">
           {% csrf_token %}
           <p>Are you sure to delete these {{ type }} "{{ object }}"?</p>
           <button type="submit">Delete</button>
           <a href="{% url 'home' %}">Success</a>  <!-- Замените 'home' на свою страницу -->
       </form>
-
 
 
 </body>

@@ -46,17 +46,28 @@
   </div>
 </nav>
 
+<div class="col-9">
+    <div class="row">
+      {% for item in fan %}
+      <div class="col-md-4">  <!-- Разделяем на 3 колонки -->
+        <div class="card text-center mt-4">
+          <div class="card-header">{{ item.title }}</div>
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+            <p class="card-text"></p>
 
-
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update subject</button>
-</form>
-
-
-
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Update subject</button>
+            </form>
+         </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
 
 
