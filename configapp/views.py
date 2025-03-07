@@ -1,8 +1,48 @@
 from django.shortcuts import render, redirect,get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from configapp.forms import *
-from io import BytesIO
 from reportlab.pdfgen import canvas
+from io import BytesIO
+import qrcode
+import os
+from django.conf import settings
+from .models import Student
+
+def generate_student_pdf(student):
+    pdf_dir = os.path.join(settings.MEDIA_ROOT, 'pdf')
+    os.makedirs(pdf_dir, exist_ok=True)  # Создаём папку, если её нет
+
+    pdf_path = os.path.join(pdf_dir, f"{student.full_name}.pdf")
+
+    # Создаём PDF
+    pdf_buffer = BytesIO()
+    pdf = canvas.Canvas(pdf_buffer)
+
+    pdf.setFont("Helvetica-Bold", 16)
+    pdf.drawString(200, 800, "Информация о студенте")
+
+    pdf.setFont("Helvetica", 12)
+    pdf.drawString(100, 760, f"ФИО: {student.full_name}")
+    pdf.drawString(100, 740, f"Телефон: {student.phone_number}")
+    pdf.drawString(100, 720, f"Адрес: {student.adress}")
+    pdf.drawString(100, 700, f"Предмет: {student.fan}")
+    pdf.drawString(100, 680, f"Учитель: {student.teacher}")
+
+    pdf.showPage()
+    pdf.save()
+
+    with open(pdf_path, "wb") as f:
+        f.write(pdf_buffer.getvalue())
+
+    return pdf_path
+
+
+def download_student_pdf(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+
+    pdf_path = generate_student_pdf(student)
+
+    return FileResponse(open(pdf_path, "rb"), as_attachment=True, filename=f"{student.full_name}.pdf")
 
 def index(request):
     fans = Fan.objects.all()
@@ -14,15 +54,26 @@ def index(request):
     }
     return render(request,'index.html',context=context)
 
-def filtering(request,fan_id):
-    students = Student.objects.filter(fan_id=fan_id)
+def AboutStudent(request,id):
+    students = Student.objects.get(pk=id)
+
+    context = {
+        "student":students,
+    }
+    return render(request, 'fan_form.html', context=context)
+
+def filtering(request, fan_id):
+    students = Student.objects.filter(fan__id=fan_id)  # Используем fan__id вместо fan_id
     fans = Fan.objects.all()
 
     context = {
-        "students":students,
-        "fans":fans,
+        "students": students,
+        "fans": fans,
     }
     return render(request, 'Filter_student.html', context=context)
+    
+
+
 
 def teachercreate(request):
     if request.method == 'POST':
@@ -35,6 +86,21 @@ def teachercreate(request):
     return render(request, 'teacherad.html', {'form': form})
 
 
+
+def generate_qr(request):
+    # Ссылка на Telegram-канал
+    telegram_link = "https://t.me/your_channel"
+
+    # Создание QR-кода
+    qr = qrcode.make(telegram_link)
+
+    # Сохранение QR-кода в памяти
+    buffer = BytesIO()
+    qr.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    # Возвращаем изображение как HTTP-ответ
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
 
 
 

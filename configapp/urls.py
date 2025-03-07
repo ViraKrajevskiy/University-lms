@@ -1,10 +1,15 @@
-from django.contrib.admindocs.utils import named_group_matcher
 from django.urls import path
 from .views import *
 
+
 urlpatterns = [
+    path('download_student/<int:student_id>/', download_student_pdf, name='download_student_pdf'),
+
+    path('qr/', generate_qr, name='generate_qr'),
+
     path('',index,name='home'),
     path('filtering/<int:fan_id>', filtering, name='filtering'),
+    path('student/<int:id>',AboutStudent,name="AboutStudent"),
 
     path('teacherad/create/',teachercreate,name = 'teacheradd'),
     path('teacher/update/<int:teacher_id>/', update_teacher, name='update_teacher'),

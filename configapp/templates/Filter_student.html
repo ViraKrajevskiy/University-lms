@@ -63,7 +63,7 @@
 
     <div class="card text-center mt-4">
       {% for item in students %}
-      <div class="card-header">{{item.first_name}}</div>
+      <div class="card-header">{{item.full_name}}</div>
       <div class="card-body">
         <div class="row">
         </div>
@@ -72,8 +72,6 @@
         <a href="{% url 'update_student' item.id %}" class="btn btn-warning mt-3">Update student</a>
         <a href="{% url 'delete_student' item.id %}" class="btn btn-danger mt-3"
            onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Delete student</a>
-
-        
       </div>
       {% endfor %}
     </div>

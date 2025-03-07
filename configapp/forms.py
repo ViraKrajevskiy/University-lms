@@ -24,14 +24,17 @@ class FanForm(forms.ModelForm):
             raise ValueError('The name space is not started to number')
         return title
 
+
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['full_name', 'phone_number', 'address', 'fan','teacher']
+        fields = ['full_name', 'phone_number', 'address', 'fan', 'teacher', 'photo']
+
         widgets = {
-            'full_name':forms.TextInput(attrs={'class':'form-control'}),
-            'phone_number':forms.NumberInput(attrs={'class':'form-control','rows':5}),
-            'address':forms.Textarea(attrs={'class':'form-control'}),
-            'fan':forms.Select(attrs={'class':'form-control'}),
-            'teacher':forms.Select(attrs={'class':'form-control'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'address': forms.Textarea(attrs={'class': 'form-control'}),
+            'fan': forms.Select(attrs={'class': 'form-control'}),
+            'teacher': forms.Select(attrs={'class': 'form-control'}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'})  # Виджет для фото
         }
