@@ -9,7 +9,7 @@ urlpatterns = [
 
     path('',index,name='home'),
     path('filtering/<int:fan_id>', filtering, name='filtering'),
-    path('students/<int:id>',AboutStudent,name="AboutStudent"),
+    path('students/<int:student_id>',AboutStudent,name="AboutStudent"),
 
     path('teacherad/create/',teachercreate,name = 'teacheradd'),
     path('teacher/update/<int:teacher_id>/', update_teacher, name='update_teacher'),

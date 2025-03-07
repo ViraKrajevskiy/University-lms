@@ -1,22 +1,23 @@
 from django.shortcuts import render, redirect,get_object_or_404
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, HttpResponseForbidden, Http404
+from reportlab.pdfbase.pdfdoc import pdfdocEnc
+from reportlab.pdfbase.ttfonts import TTFont
+
 from configapp.forms import *
-from reportlab.pdfgen import canvas
-from io import BytesIO
 import qrcode
 import os
+from io import BytesIO
 from django.conf import settings
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+from .models import *
 
 
 def generate_student_pdf(student):
-    pdf_dir = os.path.join(settings.MEDIA_ROOT, 'pdf')
-    os.makedirs(pdf_dir, exist_ok=True)  # Создаём папку, если её нет
-
-    pdf_path = os.path.join(pdf_dir, f"{student.full_name}.pdf")
-
-    # Создаём PDF
+    """Создаёт PDF с данными указанного студента."""
     pdf_buffer = BytesIO()
-    pdf = canvas.Canvas(pdf_buffer)
+    pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
 
     pdf.setFont("Helvetica-Bold", 16)
     pdf.drawString(200, 800, "Информация о студенте")
@@ -24,26 +25,39 @@ def generate_student_pdf(student):
     pdf.setFont("Helvetica", 12)
     pdf.drawString(100, 760, f"ФИО: {student.full_name}")
     pdf.drawString(100, 740, f"Телефон: {student.phone_number}")
-    pdf.drawString(100, 720, f"Адрес: {student.adress}")
-    pdf.drawString(100, 700, f"Предмет: {student.fan}")
-    pdf.drawString(100, 680, f"Учитель: {student.teacher}")
-    pdf.drawImage(100,700,f"Фото: {student.photo}")
+    pdf.drawString(100, 720, f"Адрес: {student.address}")
+    pdf.drawString(100, 700, f"Предмет: {student.fan.title}")
+    pdf.drawString(100, 680, f"Учитель: {student.teacher.teacherName}")
+
+    # Добавление фото (если есть)
+    if student.photo:
+        photo_path = os.path.join(settings.MEDIA_ROOT, str(student.photo))
+        if os.path.exists(photo_path):
+            pdf.drawImage(ImageReader(photo_path), 100, 550, width=100, height=100)
 
     pdf.showPage()
     pdf.save()
 
-    with open(pdf_path, "wb") as f:
-        f.write(pdf_buffer.getvalue())
-
-    return pdf_path
+    pdf_buffer.seek(0)  # Важно, чтобы PDF не был пустым
+    return pdf_buffer
 
 
 def download_student_pdf(request, student_id):
+    """Позволяет скачать данные любого студента по его ID."""
     student = get_object_or_404(Student, id=student_id)
 
-    pdf_path = generate_student_pdf(student)
+    # Генерируем PDF
+    pdf_buffer = generate_student_pdf(student)
 
-    return FileResponse(open(pdf_path, "rb"), as_attachment=True, filename=f"{student.full_name}.pdf")
+    if not pdf_buffer:  # Проверяем, чтобы не было None
+        raise Http404("Ошибка при создании PDF")
+
+    # Отправляем файл пользователю
+    return FileResponse(pdf_buffer, as_attachment=True, filename=f"{student.full_name}.pdf")
+
+
+
+
 
 def index(request):
     fans = Fan.objects.all()
@@ -55,8 +69,8 @@ def index(request):
     }
     return render(request,'index.html',context=context)
 
-def AboutStudent(request,id):
-    students = Student.objects.get(pk=id)
+def AboutStudent(request,student_id):
+    students = Student.objects.get( id = student_id)
 
     context = {
         "student":students,
