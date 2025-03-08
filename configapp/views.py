@@ -70,11 +70,13 @@ def index(request):
     }
     return render(request,'index.html',context=context)
 
-def AboutStudent(request,student_id):
-    students = Student.objects.get( id = student_id)
+def AboutStudent(request, new_id):
+    studentses = Student.objects.get(pk=new_id)
+    fanse = Fan.objects.all()
 
     context = {
-        "student":students,
+        "new":studentses,
+        "fanse":fanse,
     }
     return render(request, 'fan_form.html', context=context)
 

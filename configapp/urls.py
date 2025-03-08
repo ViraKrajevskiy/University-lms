@@ -9,7 +9,7 @@ urlpatterns = [
 
     path('',index,name='home'),
     path('filtering/<int:fan_id>', filtering, name='filtering'),
-    path('students/<int:student_id>',AboutStudent,name="AboutStudent"),
+    path('new/<int:new_id>',AboutStudent,name='AboutStudent'),
 
     # Создание
     path('teacher/create/', TeacherCreateView.as_view(), name='teacher_create'),
