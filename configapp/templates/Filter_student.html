@@ -31,7 +31,7 @@
             <li><a class="dropdown-item" href="{% url 'student_create' %}">Add student</a></li>
             <li><a class="dropdown-item" href="{% url 'fan_create' %}">Add subject</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'teacheradd' %}">Add teacher</a></li>
+            <li><a class="dropdown-item" href="{% url 'teacher_create' %}">Add teacher</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -69,8 +69,8 @@
         </div>
         <h5 class="card-title">{{item.phone_number}}</h5>
         <p class="card-text">{{item.adress}}  {{item.fan}}  {{item.teacher}}</p>
-        <a href="{% url 'update_student' item.id %}" class="btn btn-warning mt-3">Update student</a>
-        <a href="{% url 'delete_student' item.id %}" class="btn btn-danger mt-3"
+        <a href="{% url 'student_update' item.id %}" class="btn btn-warning mt-3">Update student</a>
+        <a href="{% url 'student_delete' item.id %}" class="btn btn-danger mt-3"
            onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Delete student</a>
         <a href="{% url 'download_student_pdf' item.id %}" class="btn btn-primary">Скачать PDF</a>
       </div>

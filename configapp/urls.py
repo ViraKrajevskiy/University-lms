@@ -11,15 +11,19 @@ urlpatterns = [
     path('filtering/<int:fan_id>', filtering, name='filtering'),
     path('students/<int:student_id>',AboutStudent,name="AboutStudent"),
 
-    path('teacherad/create/',teachercreate,name = 'teacheradd'),
-    path('teacher/update/<int:teacher_id>/', update_teacher, name='update_teacher'),
-    path('teacher/delete/<int:teacher_id>/', delete_teacher, name='delete_teacher'),
+    # Создание
+    path('teacher/create/', TeacherCreateView.as_view(), name='teacher_create'),
+    path('fan/create/', FanCreateView.as_view(), name='fan_create'),
+    path('student/create/', StudentCreateView.as_view(), name='student_create'),
 
-    path('fan/create/', fan_create, name='fan_create'),
-    path('fan/update/<int:fan_id>/', update_fan, name='update_fan'),
-    path('fan/delete/<int:fan_id>/', delete_fan, name='delete_fan'),
+    # Обновление
+    path('teacher/update/<int:pk>/', TeacherUpdateView.as_view(), name='teacher_update'),
+    path('fan/update/<int:pk>/', FanUpdateView.as_view(), name='fan_update'),
+    path('student/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update'),
 
-    path('student/create/', student_create, name='student_create'),
-    path('student/update/<int:student_id>/', update_student, name='update_student'),
-    path('student/delete/<int:student_id>/', delete_student, name='delete_student'),
+    # Удаление
+    path('teacher/delete/<int:pk>/', TeacherDeleteView.as_view(), name='teacher_delete'),
+    path('fan/delete/<int:pk>/', FanDeleteView.as_view(), name='fan_delete'),
+    path('student/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete'),
 ]
+

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse, FileResponse, HttpResponseForbidden, Http404
+from django.urls.base import reverse_lazy
 from reportlab.pdfbase.pdfdoc import pdfdocEnc
 from reportlab.pdfbase.ttfonts import TTFont
 
@@ -88,17 +89,15 @@ def filtering(request, fan_id):
     return render(request, 'Filter_student.html', context=context)
     
 
-
-
-def teachercreate(request):
-    if request.method == 'POST':
-        form = TeacherForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = TeacherForm()
-    return render(request, 'teacherad.html', {'form': form})
+# def teachercreate(request):
+#     if request.method == 'POST':
+#         form = TeacherForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = TeacherForm()
+#     return render(request, 'teacherad.html', {'form': form})
 
 
 
@@ -118,86 +117,153 @@ def generate_qr(request):
     return HttpResponse(buffer.getvalue(), content_type="image/png")
 
 
+#
+# def fan_create(request):
+#     if request.method == 'POST':
+#         form = FanForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = FanForm()
+#     return render(request, 'fan_form.html', {'form': form})
+#
+# def student_create(request):
+#     if request.method == 'POST':
+#         form = StudentForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = StudentForm()
+#     return render(request, 'student_form.html', {'form': form})
+#
+# # Обновление
+# def update_teacher(request, teacher_id):
+#     teacher = get_object_or_404(Teacher, id=teacher_id)
+#     if request.method == "POST":
+#         form = TeacherForm(request.POST, instance=teacher)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('teacher_list')  # Измени на свой маршрут
+#     else:
+#         form = TeacherForm(instance=teacher)
+#     return render(request, 'about_teacher.html', {'form': form})
+#
+#
+# def update_fan(request, fan_id):
+#     fan = get_object_or_404(Fan, id=fan_id)
+#     if request.method == "POST":
+#         form = FanForm(request.POST, instance=fan)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('fan_list')  # Измени на свой маршрут
+#     else:
+#         form = FanForm(instance=fan)
+#     return render(request, 'about_fan.html', {'form': form})
+#
+#
+# def update_student(request, student_id):
+#     student = get_object_or_404(Student, id=student_id)
+#     if request.method == "POST":
+#         form = StudentForm(request.POST, instance=student)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('student_list')  # Измени на свой маршрут
+#     else:
+#         form = StudentForm(instance=student)
+#     return render(request, 'about_student.html', {'form': form})
+#
+#
+# # Удаление учителя
+# def delete_teacher(request, teacher_id):
+#     teacher = get_object_or_404(Teacher, id=teacher_id)
+#     if request.method == "POST":
+#         teacher.delete()
+#         return redirect('teacher_list')  # Измени на свой маршрут
+#     return render(request, 'delete_all.html', {'object': teacher, 'type': 'учителя'})
+#
+# def delete_fan(request, fan_id):
+#     fan = get_object_or_404(Fan, id=fan_id)
+#     if request.method == "POST":
+#         fan.delete()
+#         return redirect('fan_list')  # Измени на свой маршрут
+#     return render(request, 'delete_all.html', {'object': fan, 'type': 'предмета'})
+#
+#
+# def delete_student(request, student_id):
+#     student = get_object_or_404(Student, id=student_id)
+#     if request.method == "POST":
+#         student.delete()
+#         return redirect('student_list')  # Измени на свой маршрут
+#     return render(request, 'delete_all.html', {'object': student, 'type': 'студента'})
+#
+#
+#
+class TeacherCreateView(CreateView):
+    model = Teacher
+    form_class = TeacherForm
+    template_name = 'teacherad.html'
+    success_url = reverse_lazy('home')
 
-def fan_create(request):
-    if request.method == 'POST':
-        form = FanForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = FanForm()
-    return render(request, 'fan_form.html', {'form': form})
+class FanCreateView(CreateView):
+    model = Fan
+    form_class = FanForm
+    template_name = 'fan_form.html'
+    success_url = reverse_lazy('home')
 
-def student_create(request):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = StudentForm()
-    return render(request, 'student_form.html', {'form': form})
+class StudentCreateView(CreateView):
+    model = Student
+    form_class = StudentForm
+    template_name = 'about_student.html'
+    success_url = reverse_lazy('home')
 
 # Обновление
-def update_teacher(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    if request.method == "POST":
-        form = TeacherForm(request.POST, instance=teacher)
-        if form.is_valid():
-            form.save()
-            return redirect('teacher_list')  # Измени на свой маршрут
-    else:
-        form = TeacherForm(instance=teacher)
-    return render(request, 'about_teacher.html', {'form': form})
+class TeacherUpdateView(UpdateView):
+    model = Teacher
+    form_class = TeacherForm
+    template_name = 'about_teacher.html'
+    success_url = reverse_lazy('teacher_list')
 
+class FanUpdateView(UpdateView):
+    model = Fan
+    form_class = FanForm
+    template_name = 'about_fan.html'
+    success_url = reverse_lazy('fan_list')
 
-def update_fan(request, fan_id):
-    fan = get_object_or_404(Fan, id=fan_id)
-    if request.method == "POST":
-        form = FanForm(request.POST, instance=fan)
-        if form.is_valid():
-            form.save()
-            return redirect('fan_list')  # Измени на свой маршрут
-    else:
-        form = FanForm(instance=fan)
-    return render(request, 'about_fan.html', {'form': form})
+class StudentUpdateView(UpdateView):
+    model = Student
+    form_class = StudentForm
+    template_name = 'about_student.html'
+    success_url = reverse_lazy('student_list')
 
+# Удаление
+class TeacherDeleteView(DeleteView):
+    model = Teacher
+    template_name = 'delete_all.html'
+    success_url = reverse_lazy('teacher_list')
 
-def update_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-    if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
-        if form.is_valid():
-            form.save()
-            return redirect('student_list')  # Измени на свой маршрут
-    else:
-        form = StudentForm(instance=student)
-    return render(request, 'about_student.html', {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] = 'учителя'
+        return context
 
+class FanDeleteView(DeleteView):
+    model = Fan
+    template_name = 'delete_all.html'
+    success_url = reverse_lazy('fan_list')
 
-# Удаление учителя
-def delete_teacher(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    if request.method == "POST":
-        teacher.delete()
-        return redirect('teacher_list')  # Измени на свой маршрут
-    return render(request, 'delete_all.html', {'object': teacher, 'type': 'учителя'})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] = 'предмета'
+        return context
 
-def delete_fan(request, fan_id):
-    fan = get_object_or_404(Fan, id=fan_id)
-    if request.method == "POST":
-        fan.delete()
-        return redirect('fan_list')  # Измени на свой маршрут
-    return render(request, 'delete_all.html', {'object': fan, 'type': 'предмета'})
+class StudentDeleteView(DeleteView):
+    model = Student
+    template_name = 'delete_all.html'
+    success_url = reverse_lazy('student_list')
 
-
-def delete_student(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-    if request.method == "POST":
-        student.delete()
-        return redirect('student_list')  # Измени на свой маршрут
-    return render(request, 'delete_all.html', {'object': student, 'type': 'студента'})
-
-
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] = 'студента'
+        return context

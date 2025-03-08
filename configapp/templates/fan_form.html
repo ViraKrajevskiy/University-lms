@@ -31,7 +31,7 @@
             <li><a class="dropdown-item" href="{% url 'student_create' %}">Add student</a></li>
             <li><a class="dropdown-item" href="{% url 'fan_create' %}">Add subject</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'teacheradd' %}">Add teacher</a></li>
+            <li><a class="dropdown-item" href="{% url 'teacher_create' %}">Add teacher</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -53,7 +53,6 @@
         <div class="card text-center mt-4">
           <div class="card-header">{{ item.full_name }}</div>
           <div class="card-body">
-            <img src="{% url 'generate_qr' %}" alt="QR-код для Telegram">
             <h5 class="card-title">{{ item.phone_number }}</h5>
             <p class="card-text">{{ item.adress }} | {{ item.fan }} | {{ item.teacher }}</p>
             <a href="{% url 'AboutStudent' item.pk%}" class="btn btn-primary mt-3">Go somewhere</a>
