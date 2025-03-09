@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse, FileResponse, HttpResponseForbidden, Http404
 from django.urls.base import reverse_lazy
-from reportlab.pdfbase.pdfdoc import pdfdocEnc
-from reportlab.pdfbase.ttfonts import TTFont
 
 from configapp.forms import *
 import qrcode
