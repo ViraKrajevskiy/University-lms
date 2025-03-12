@@ -47,22 +47,25 @@
 </nav>
 
         <div class="col-9">
-          <div class="card text-center mt-4">
 
+          <div class="card text-center mt-4">
+            {% for new in studentses %}
             <div class="card-header">{{new.full_name}}</div>
             <div class="card-body">
               <div class="row">
               </div>
               <h5 class="card-title">{{new.phone_number}}</h5>
               <p class="card-text">{{new.adress}}  {{new.fan}}  {{new.teacher}}</p>
-              {% for item in  %}
+
               <a href="{% url 'student_update' item.pk %}" class="btn btn-warning mt-3">Update student</a>
               <a href="{% url 'student_delete' item.pk %}" class="btn btn-danger mt-3"
                  onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Delete student</a>
               <a href="{% url 'download_student_pdf' item.pk%}" class="btn btn-primary">Скачать PDF</a>
               {% endfor %}
             </div>
+
           </div>
+
         </div>
 
 

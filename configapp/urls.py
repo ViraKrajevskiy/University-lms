@@ -7,7 +7,9 @@ urlpatterns = [
 
     path('qr/', generate_qr, name='generate_qr'),
 
-    path('',index,name='home'),
+    path('', LoginPage, name='login'),
+
+    path('index/',index,name='home'),
     path('filtering/<int:fan_id>', filtering, name='filtering'),
     path('new/<int:new_id>',AboutStudent,name='AboutStudent'),
 

@@ -1,7 +1,7 @@
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect,get_object_or_404
-from django.http import HttpResponse, FileResponse, HttpResponseForbidden, Http404
+from django.http import HttpResponse, FileResponse, Http404
 from django.urls.base import reverse_lazy
-
 from configapp.forms import *
 import qrcode
 import os
@@ -70,11 +70,10 @@ def index(request):
 
 def AboutStudent(request, new_id):
     studentses = Student.objects.get(pk=new_id)
-    fanse = Fan.objects.all()
-
+    fanss = Student.objects.all()
     context = {
         "new":studentses,
-        "fanse":fanse,
+        "fewsa":fanss,
     }
     return render(request, 'fan_form.html', context=context)
 
@@ -115,6 +114,22 @@ def generate_qr(request):
 
     # Возвращаем изображение как HTTP-ответ
     return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+
+
+
+def LoginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request,'login.html',{'form':form})
 
 
 #
@@ -209,7 +224,7 @@ class TeacherCreateView(CreateView):
 class FanCreateView(CreateView):
     model = Fan
     form_class = FanForm
-    template_name = 'fan_form.html'
+    template_name = 'Fan_add.html'
     success_url = reverse_lazy('home')
 
 class StudentCreateView(CreateView):
